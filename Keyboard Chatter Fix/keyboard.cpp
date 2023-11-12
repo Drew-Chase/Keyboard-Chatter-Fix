@@ -5,6 +5,7 @@
 ULONGLONG time_since_last_keypress;
 DWORD last_keypress;
 HHOOK hook;
+byte press_count = 0;
 
 LRESULT CALLBACK KeyboardProc(int passthrough, WPARAM state, LPARAM flag)
 {
@@ -13,10 +14,20 @@ LRESULT CALLBACK KeyboardProc(int passthrough, WPARAM state, LPARAM flag)
 		auto key = (KBDLLHOOKSTRUCT*)flag; // Get the key pressed
 		DWORD code = key->vkCode; // Get the key code
 		ULONGLONG time = GetTickCount64() - time_since_last_keypress; // Get the time since the last keypress
-
-		if (time < 50 && last_keypress == code) // If the time is less than 50ms and the last keypress is the same as the current keypress
+		if (last_keypress == code)
 		{
-			return 1; // Return 1 to block the keypress
+			press_count++; // Increment the press count
+			if (time < 50)
+			{
+				if (press_count <= 3) // If the time is less than 50ms and the last keypress is the same as the current keypress
+				{
+					return 1; // Return 1 to block the keypress
+				}
+			}
+		}
+		else
+		{
+			press_count = 0;
 		}
 
 		time_since_last_keypress = GetTickCount64(); // Set the time since the last keypress
