@@ -151,10 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="system_tray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="keyboard.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="system_tray.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Keyboard Chatter Fix.rc" />
