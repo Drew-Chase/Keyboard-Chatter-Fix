@@ -8,7 +8,6 @@
 #define IDM_OPEN_GITHUB 0x01168
 #define NOTIFICATION_TRAY_ICON_MESSAGE (WM_USER + 1)
 NOTIFYICONDATAW nid;
-
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param)
 {
 	static HMENU hPopupMenu = nullptr;
@@ -32,14 +31,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param
 
 					break;
 				}
-				case WM_LBUTTONDOWN:
-				{
-					if (hPopupMenu != nullptr)
-					{
-						DestroyMenu(hPopupMenu);
-						hPopupMenu = nullptr;
-					}
-				}
 			}
 			break;
 		}
@@ -50,7 +41,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param
 			{
 				case IDM_OPEN_GITHUB:
 				{
-					//Handle Open GitHub option
+					// Handle Open GitHub option
 					ShellExecuteW(NULL, L"open", L"https://github.com/drew-chase/keyboard-chatter-fix", NULL, NULL, SW_SHOWNORMAL);
 					break;
 				}
@@ -71,33 +62,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param
 			break;
 		}
 
-		case WM_DESTROY:
-		{
-			// Clean up resources when the window is destroyed
-			if (hPopupMenu != nullptr)
-			{
-				DestroyMenu(hPopupMenu);
-				hPopupMenu = nullptr;
-			}
-			PostQuitMessage(0);
-			break;
-		}
-
-		case WM_CLOSE:
-		{
-			if (hPopupMenu != nullptr)
-			{
-				DestroyMenu(hPopupMenu);
-				hPopupMenu = nullptr;
-			}
-		}
-
 		default:
 			return DefWindowProcW(hwnd, message, w_param, l_param);
 	}
 }
 
-HWND system_tray::CreateHiddenWindow()
+HWND system_tray::CreateHiddenWindow() // This is needed because windows is stupid and requires a window to be created to use the system tray.
 {
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -108,8 +78,10 @@ HWND system_tray::CreateHiddenWindow()
 	wc.lpszClassName = L"MyHiddenWindowClass";
 	RegisterClass(&wc);
 
+	HWND explorerHandle = FindWindow(L"Shell_TrayWnd", NULL); // Sets the parent window to the taskbar so the context menu will get destroyed when the tray loses focus.
+
 	// Create a hidden window
-	return CreateWindowExW(0, L"MyHiddenWindowClass", L"", 0, 0, 0, 0, 0, HWND_MESSAGE, NULL, hInstance, NULL);
+	return CreateWindowExW(0, L"MyHiddenWindowClass", L"", 0, 0, 0, 0, 0, explorerHandle, NULL, hInstance, NULL);
 }
 
 system_tray::system_tray()
