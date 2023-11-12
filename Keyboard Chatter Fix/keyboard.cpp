@@ -27,7 +27,7 @@ LRESULT CALLBACK KeyboardProc(int passthrough, WPARAM state, LPARAM flag)
 		}
 		else
 		{
-			press_count = 0;
+			press_count = 0; // Reset the press count
 		}
 
 		time_since_last_keypress = GetTickCount64(); // Set the time since the last keypress
@@ -39,7 +39,7 @@ LRESULT CALLBACK KeyboardProc(int passthrough, WPARAM state, LPARAM flag)
 
 keyboard::keyboard()
 {
-	hook = SetWindowsHookExW(WH_KEYBOARD_LL, KeyboardProc, NULL, NULL);
+	hook = SetWindowsHookExW(WH_KEYBOARD_LL, KeyboardProc, NULL, NULL); // Sets the keyboard hook
 	if (hook == NULL)
 	{
 		// If the keyboard hook fails, show an error message
@@ -63,5 +63,4 @@ keyboard::~keyboard()
 		// If unsuccessful show message box.
 		MessageBoxW(NULL, L"Unable to unhook the keyboard input... sowwy?", L"Error", MB_OK | MB_ICONERROR);
 	}
-	delete(hook); // Deletes the hook
 }
