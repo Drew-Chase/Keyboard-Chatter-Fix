@@ -4,6 +4,12 @@
 class keyboard
 {
 public:
+	/// <summary>
+	/// Creates the keyboard hook.
+	/// </summary>
 	keyboard();
+	/// <summary>
+	/// Unhooks the keyboard hook.
+	/// </summary>
 	~keyboard();
 };
