@@ -1,9 +1,7 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by Keyboard Chatter Fix.rc
+// LFInteractive LLC. (c) 2020-2024 All Rights Reserved
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101
@@ -12,3 +10,4 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
+#define IDI_MAINICON 101  // Add this line to define the ID for your MAINICON
