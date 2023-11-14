@@ -6,6 +6,7 @@ ULONGLONG time_since_last_keypress;
 DWORD last_keypress;
 HHOOK hook;
 byte press_count = 0;
+configuration* cfg;
 
 LRESULT CALLBACK KeyboardProc(int passthrough, WPARAM state, LPARAM flag)
 {
@@ -17,9 +18,9 @@ LRESULT CALLBACK KeyboardProc(int passthrough, WPARAM state, LPARAM flag)
 		if (last_keypress == code)
 		{
 			press_count++; // Increment the press count
-			if (time < 50)
+			if (time < cfg->time_between_keypresses)
 			{
-				if (press_count <= 3) // If the time is less than 50ms and the last keypress is the same as the current keypress
+				if (press_count <= 8) // If the time is less than 50ms and the last keypress is the same as the current keypress
 				{
 					return 1; // Return 1 to block the keypress
 				}
@@ -37,8 +38,9 @@ LRESULT CALLBACK KeyboardProc(int passthrough, WPARAM state, LPARAM flag)
 	return CallNextHookEx(NULL, passthrough, state, flag); // Passes the keypress to the next hook
 }
 
-keyboard::keyboard()
+keyboard::keyboard(configuration* config)
 {
+	cfg = config;
 	hook = SetWindowsHookExW(WH_KEYBOARD_LL, KeyboardProc, NULL, NULL); // Sets the keyboard hook
 	if (hook == NULL)
 	{
